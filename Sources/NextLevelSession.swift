@@ -57,7 +57,7 @@ public class NextLevelSession {
     /// Creates a URL for session output, otherwise nil
     public var url: URL? {
         get {
-            let filename = "\(self.identifier.uuidString)-NL-merged.\(self.fileExtension)"
+            let filename = "\(self.identifier.uuidString)-merged.\(self.fileExtension)"
             if let url = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory) {
                 return url
             } else {
@@ -713,7 +713,7 @@ extension NextLevelSession {
     ///   - completionHandler: Handler for when the merging process completes
     public func mergeClips(usingPreset preset: String, completionHandler: @escaping NextLevelSessionMergeClipsCompletionHandler) {
         self.executeClosureAsyncOnSessionQueueIfNecessary {
-            let filename = "\(self.identifier.uuidString)-NL-merged.\(self.fileExtension)"
+            let filename = "\(self.identifier.uuidString)-merged.\(self.fileExtension)"
 
             let outputURL = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory)
             var asset: AVAsset?
@@ -841,7 +841,7 @@ extension NextLevelSession {
 extension NextLevelSession {
 
     internal func nextFileURL() -> URL? {
-        let filename = "\(self.identifier.uuidString)-NL-clip.\(self._clipFilenameCount).\(self.fileExtension)"
+        let filename = "\(self.identifier.uuidString)-clip.\(self._clipFilenameCount).\(self.fileExtension)"
         if let url = NextLevelClip.clipURL(withFilename: filename, directoryPath: self.outputDirectory) {
             self.removeFile(fileUrl: url)
             self._clipFilenameCount += 1

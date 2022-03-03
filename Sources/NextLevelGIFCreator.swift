@@ -54,7 +54,7 @@ public class NextLevelGIFCreator {
     // MARK: - internal
 
     fileprivate func createOutputFilePath() -> URL? {
-        let filename = "\(Date().iso8601())-NL.\(self._fileExtension)"
+        let filename = "\(Date().iso8601()).\(self._fileExtension)"
 
         var gifURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
         gifURL.appendPathComponent(filename)

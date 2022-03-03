@@ -1347,7 +1347,7 @@ extension NextLevel {
         }
 
         var didChangeOrientation = false
-        let currentOrientation = AVCaptureVideoOrientation.avorientationFromUIDeviceOrientation(UIDevice.current.orientation)
+        let currentOrientation = deviceOrientation
 
         if let previewConnection = self.previewLayer.connection {
             if previewConnection.isVideoOrientationSupported && previewConnection.videoOrientation != currentOrientation {
@@ -3074,7 +3074,8 @@ extension NextLevel {
     @objc internal func deviceOrientationDidChange(_ notification: NSNotification) {
         if self.automaticallyUpdatesDeviceOrientation {
             self._sessionQueue.sync {
-                self.updateVideoOrientation()
+                let currentOrientation = AVCaptureVideoOrientation.avorientationFromUIDeviceOrientation(UIDevice.current.orientation)
+                deviceOrientation = currentOrientation
             }
         }
     }
