@@ -340,7 +340,7 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
 
     public static let AudioBitRateDefault: Int = 96000
     public static let AudioSampleRateDefault: Float64 = 44100
-    public static let AudioChannelsCountDefault: Int = 2
+    public static let AudioChannelsCountDefault: Int = 1
 
     // MARK: - properties
 
