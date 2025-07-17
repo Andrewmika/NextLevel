@@ -386,9 +386,22 @@ public class NextLevelAudioConfiguration: NextLevelConfiguration {
             }
 
             var layoutSize: Int = 0
-            if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, sizeOut: &layoutSize) {
-                let currentChannelLayoutData = layoutSize > 0 ? Data(bytes: currentChannelLayout, count: layoutSize) : Data()
-                config[AVChannelLayoutKey] = currentChannelLayoutData
+            if let currentChannelLayout = CMAudioFormatDescriptionGetChannelLayout(formatDescription, sizeOut: &layoutSize),
+               layoutSize > 0 {
+                // 获取声道布局中的声道数量
+                let audioChannelLayout = UnsafeRawPointer(currentChannelLayout).assumingMemoryBound(to: AudioChannelLayout.self)
+                let layoutChannelCount = Int(audioChannelLayout.pointee.mNumberChannelDescriptions)
+                
+                // 只有当声道数量匹配或者未指定channelsCount时才使用声道布局
+                if self.channelsCount == nil || self.channelsCount == layoutChannelCount {
+                    let currentChannelLayoutData = Data(bytes: currentChannelLayout, count: layoutSize)
+                    config[AVChannelLayoutKey] = currentChannelLayoutData
+                    // 确保channelsCount与布局一致
+                    if self.channelsCount == nil {
+                        self.channelsCount = layoutChannelCount
+                    }
+                }
+                // 如果不匹配，则不添加AVChannelLayoutKey，让系统根据AVNumberOfChannelsKey自动创建适当的声道布局
             }
         }
 
