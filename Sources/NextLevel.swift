@@ -603,7 +603,7 @@ extension NextLevel {
     }
 
     /// Stops the current recording session.
-    public func stop() {
+    public func stop(complete: (() -> Void)? = nil) {
         if let session = self._captureSession {
             self.executeClosureAsyncOnSessionQueueIfNecessary {
                 if session.isRunning == true {
@@ -618,6 +618,9 @@ extension NextLevel {
                 self._recordingSession = nil
                 self._captureSession = nil
                 self._currentDevice = nil
+                DispatchQueue.main.async {
+                    complete?()
+                }
             }
         }
 
