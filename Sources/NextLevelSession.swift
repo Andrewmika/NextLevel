@@ -647,13 +647,16 @@ extension NextLevelSession {
     /// Removes a specific clip from a session.
     ///
     /// - Parameter clip: Clip to be removed
-    public func remove(clip: NextLevelClip) {
+    public func remove(clip: NextLevelClip, removeFile: Bool = false) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if let idx = self._clips.firstIndex(where: { clipToEvaluate -> Bool in
                 clip.uuid == clipToEvaluate.uuid
             }) {
                 self._clips.remove(at: idx)
                 self._totalDuration = CMTimeSubtract(self._totalDuration, clip.duration)
+                if removeFile {
+                    clip.removeFile()
+                }
             }
         }
     }
@@ -694,11 +697,11 @@ extension NextLevelSession {
     }
 
     /// Removes the last recorded clip for a session, "Undo".
-    public func removeLastClip() {
+    public func removeLastClip(removeFile: Bool) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
             if !self._clips.isEmpty,
                let clipToRemove = self.clips.last {
-                self.remove(clip: clipToRemove)
+                self.remove(clip: clipToRemove, removeFile: removeFile)
             }
         }
     }
